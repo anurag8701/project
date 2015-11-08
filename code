@@ -1,0 +1,107 @@
+#include<stdio.h>
+#include<conio.h>
+#include<string.h>
+#include<stdlib.h>
+void pass1();
+void main()
+{
+    pass1();
+}
+void pass1()
+{
+    FILE *f1,*f2,*f3,*f4,*f5;
+    char name[10],mneu[10],operand[10],label[10],search[10];
+    int addr,start,locctr,found=0,found1=0,size,number,length,opcode;
+    f1=fopen("input.txt","r");
+    f2=fopen("symtab.txt","w");
+    f3=fopen("output.txt","w");
+    fclose(f2);
+    fscanf(f1,"%s %s %x",name,mneu,&addr);
+    if(strcmp(mneu,"START")==0)
+    {
+        start=addr;
+        locctr=start;
+        fprintf(f3,"%s %s %x\n",name,mneu,locctr);
+        fscanf(f1,"%s %s %s",label,mneu,operand);
+    }
+    else
+        locctr=0;
+    while(strcmp(mneu,"END")!=0)
+    {   fprintf(f3,"%x %s %s %s\n",locctr,label,mneu,operand);
+        if(strcmp(label,"-")!=0)
+        {   f5=fopen("symtab.txt","r");
+            found=0;
+            while(!feof(f5))//searching symtab
+            {
+            fscanf(f5,"%s",search);
+            if(strcmp(search,label)==0)
+                {   found=1;
+                    break;
+                }
+            }
+            fclose(f5);
+            if(found==1)
+            {
+                printf("wrong input\n");
+                exit(0);
+            }
+            else
+            {
+                f2=fopen("symtab.txt","a");
+                fprintf(f2,"%s %x\n",label,locctr);//symtab
+                fclose(f2);
+            }
+
+        }
+        f4=fopen("optab.txt","r");
+        found1=0;
+        while(!feof(f4))
+            {
+            fscanf(f4,"%s %x %x",search,&size,&opcode);
+            if(strcmp(search,mneu)==0)
+                {   found1=1;
+                    break;
+                }
+            }
+            fclose(f4);
+            if(found1==1)
+            {
+                locctr=locctr+size;
+            }
+            else if(strcmp(mneu,"RESW")==0)
+            {   sscanf(operand,"%x",&number);
+                locctr=locctr+(3*number);
+            }
+             else if(strcmp(mneu,"RESB")==0)
+            {   sscanf(operand,"%x",&number);
+                locctr=locctr+number;
+            }
+            else if(strcmp(mneu,"BYTE")==0)
+            {
+                 if(operand[0]=='X')
+                 {
+                     length=strlen(operand)-3;
+                     number=number/2;
+                     locctr=locctr+number;
+                 }
+                 else
+                 {
+                     length=strlen(operand)-3;
+                     locctr=locctr+length;
+
+                 }
+            }
+            else if(strcmp(mneu,"WORD")==0)
+                locctr=locctr+3;
+            else
+            {
+                printf("ERROR EXIT\n");
+                exit(0);
+            }
+            fscanf(f1,"%s %s %s",label,mneu,operand);
+    }
+    size=(locctr-start);
+    fprintf(f3,"%x %s %s %s\n",locctr,label,mneu,operand);
+    fprintf(f3,"LENGTH OF PROGRAM %x\n",size);
+
+}
