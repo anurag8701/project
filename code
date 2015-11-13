@@ -69,11 +69,11 @@ void pass1()
                 locctr=locctr+size;
             }
             else if(strcmp(mneu,"RESW")==0)
-            {   sscanf(operand,"%x",&number);
+            {   sscanf(operand,"%d",&number);
                 locctr=locctr+(3*number);
             }
              else if(strcmp(mneu,"RESB")==0)
-            {   sscanf(operand,"%x",&number);
+            {   sscanf(operand,"%d",&number);
                 locctr=locctr+number;
             }
             else if(strcmp(mneu,"BYTE")==0)
@@ -81,7 +81,7 @@ void pass1()
                  if(operand[0]=='X')
                  {
                      length=strlen(operand)-3;
-                     number=number/2;
+                     number=length/2;
                      locctr=locctr+number;
                  }
                  else
