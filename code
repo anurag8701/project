@@ -782,3 +782,6 @@ void pass2()
         fclose(f5);
 
 }
+void pass2()
+{
+}
