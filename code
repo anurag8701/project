@@ -20,7 +20,7 @@ void pass1()
     f2=fopen("symtab.txt","w");
     f3=fopen("inter.txt","w");
     fclose(f2);
-    fscanf(f1,"%s %s %x",name,mneu,&addr);
+    fscanf(f1,"%s %s %X",name,mneu,&addr);
     if(strcmp(mneu,"START")==0)
     {
         start=addr;
@@ -58,29 +58,29 @@ void pass1()
      while(strcmp(mneu,"END")!=0)
     {   if(locctr<16)
         {
-        fprintf(f3,"00000%x %s %s %s\n",locctr,label,mneu,operand);
+        fprintf(f3,"00000%X %s %s %s\n",locctr,label,mneu,operand);
         }
         else if(locctr<256)
         {
-        fprintf(f3,"0000%x %s %s %s\n",locctr,label,mneu,operand);
+        fprintf(f3,"0000%X %s %s %s\n",locctr,label,mneu,operand);
         }
          else if(locctr<4096)
         {
-        fprintf(f3,"000%x %s %s %s\n",locctr,label,mneu,operand);
+        fprintf(f3,"000%X %s %s %s\n",locctr,label,mneu,operand);
         }
         else if(locctr<65536)
         {
-            fprintf(f3,"00%x %s %s %s\n",locctr,label,mneu,operand);
+            fprintf(f3,"00%X %s %s %s\n",locctr,label,mneu,operand);
 
         }
         else if(locctr<1048576)
         {
-            fprintf(f3,"0%x %s %s %s\n",locctr,label,mneu,operand);
+            fprintf(f3,"0%X %s %s %s\n",locctr,label,mneu,operand);
 
         }
         else
         {
-            fprintf(f3,"%x %s %s %s\n",locctr,label,mneu,operand);
+            fprintf(f3,"%X %s %s %s\n",locctr,label,mneu,operand);
 
         }
         if(strcmp(label,"-")!=0)
@@ -103,7 +103,7 @@ void pass1()
             else
             {
                 f2=fopen("symtab.txt","a");
-                fprintf(f2,"%s %x\n",label,locctr);//symtab
+                fprintf(f2,"%s %X\n",label,locctr);//symtab
                 fclose(f2);
             }
 
@@ -112,7 +112,7 @@ void pass1()
         found1=0;
         while(!feof(f4))
             {
-            fscanf(f4,"%s %x %x",search,&size,&opcode);
+            fscanf(f4,"%s %X %X",search,&size,&opcode);
             if(strcmp(search,mneu)==0)
                 {   found1=1;
                     break;
@@ -168,29 +168,29 @@ void pass1()
     psize=(locctr-start);
      if(locctr<16)
         {
-        fprintf(f3,"00000%x %s %s %s\n",locctr,label,mneu,operand);
+        fprintf(f3,"00000%X %s %s %s\n",locctr,label,mneu,operand);
         }
         else if(locctr<256)
         {
-        fprintf(f3,"0000%x %s %s %s\n",locctr,label,mneu,operand);
+        fprintf(f3,"0000%X %s %s %s\n",locctr,label,mneu,operand);
         }
          else if(locctr<4096)
         {
-        fprintf(f3,"000%x %s %s %s\n",locctr,label,mneu,operand);
+        fprintf(f3,"000%X %s %s %s\n",locctr,label,mneu,operand);
         }
         else if(locctr<65536)
         {
-            fprintf(f3,"00%x %s %s %s\n",locctr,label,mneu,operand);
+            fprintf(f3,"00%X %s %s %s\n",locctr,label,mneu,operand);
 
         }
          else if(locctr<1048576)
         {
-            fprintf(f3,"0%x %s %s %s\n",locctr,label,mneu,operand);
+            fprintf(f3,"0%X %s %s %s\n",locctr,label,mneu,operand);
 
         }
          else
         {
-            fprintf(f3,"%x %s %s %s\n",locctr,label,mneu,operand);
+            fprintf(f3,"%X %s %s %s\n",locctr,label,mneu,operand);
 
         }
     fclose(f1);
@@ -207,7 +207,7 @@ void pass1()
         fscanf(f5,"%s",search);
         if(strcmp(search,b)==0)
         {   found=1;
-            fscanf(f5,"%x",&base);
+            fscanf(f5,"%X",&base);
             break;
         }
         }
@@ -241,11 +241,11 @@ void pass2()
         exit(0);
     }
     strncpy(nm,name,5);
-    fprintf(f5,"H ^ %s ^ %s ^ %x\n",nm,start,psize);//psize
+    fprintf(f5,"H ^ %s ^ %s ^ %06X\n",nm,start,psize);//psize
     fprintf(f5,"T ^ %s ^ ",locctr);
     f7=fopen("listing.txt","w");
    while(strcmp(mneu,"END")!=0)
-    {   sscanf(locctr,"%x",&loc);
+    {   sscanf(locctr,"%X",&loc);
         sz=0;
         found=0;
         sum=0;
@@ -310,7 +310,7 @@ void pass2()
                                 exit(0);
                                 break;
                         }
-                        sprintf(extra,"%s%x%x",opcode,r1,r2);
+                        sprintf(extra,"%s%X%X",opcode,r1,r2);
                     }
                     else
                     {
@@ -400,7 +400,7 @@ void pass2()
                            fscanf(f3,"%s",symbol);
                            if(strcmp(format3,symbol)==0)
                            {
-                               fscanf(f3,"%x",&ta);
+                               fscanf(f3,"%X",&ta);
                                found=1;
                                break;
                            }
@@ -415,7 +415,7 @@ void pass2()
                            {
                                sprintf(temp,"%x",disp);
                                strncpy(temp1,temp+5,3);
-                               sscanf(temp1,"%x",&disp);
+                               sscanf(temp1,"%X",&disp);
                            }
                        }
                        else
@@ -435,15 +435,15 @@ void pass2()
                         sum=sum+nibp[i];
                         if(disp<16)
                         {
-                        sprintf(extra,"%s%x00%x",opcode,sum,disp);
+                        sprintf(extra,"%s%X00%X",opcode,sum,disp);
                         }
                         else if(disp<256)
                         {
-                        sprintf(extra,"%s%x0%x",opcode,sum,disp);
+                        sprintf(extra,"%s%X0%X",opcode,sum,disp);
                         }
                         else
                         {
-                        sprintf(extra,"%s%x%x",opcode,sum,disp);
+                        sprintf(extra,"%s%X%X",opcode,sum,disp);
 
                         }
 
@@ -527,23 +527,23 @@ void pass2()
                     }
                         if(ta<16)
                         {
-                        sprintf(extra,"%s%x0000%x",opcode,sum,ta);
+                        sprintf(extra,"%s%X0000%X",opcode,sum,ta);
                         }
                         else if(ta<256)
                         {
-                        sprintf(extra,"%s%x000%x",opcode,sum,ta);
+                        sprintf(extra,"%s%X000%X",opcode,sum,ta);
                         }
                         else if(ta<4096)
                         {
-                        sprintf(extra,"%s%x00%x",opcode,sum,ta);
+                        sprintf(extra,"%s%X00%X",opcode,sum,ta);
                         }
                         else if(ta<65536)
                         {
-                        sprintf(extra,"%s%x0%x",opcode,sum,ta);
+                        sprintf(extra,"%s%X0%X",opcode,sum,ta);
                         }
                         else
                         {
-                        sprintf(extra,"%s%x%x",opcode,sum,ta);
+                        sprintf(extra,"%s%X%X",opcode,sum,ta);
                         }
                     nscopy=nowsize;
                     nowsize=nowsize+4;
@@ -551,30 +551,31 @@ void pass2()
                     {   modi=loc+1;
                         if(modi<16)
                         {
-                            sprintf(addr,"00000%x",modi);
+                            sprintf(addr,"00000%X",modi);
                         }
                         else if(modi<256)
                         {
-                            sprintf(addr,"0000%x",modi);
+                            sprintf(addr,"0000%X",modi);
                         }
                         else if(modi<4096)
                         {
-                            sprintf(addr,"000%x",modi);
+                            sprintf(addr,"000%X",modi);
                         }
                         else if(modi<65536)
                         {
-                            sprintf(addr,"00%x",modi);
+                            sprintf(addr,"00%X",modi);
                         }
                         else if(modi<1048576)
                         {
-                            sprintf(addr,"0%x",modi);
+                            sprintf(addr,"0%X",modi);
                         }
                         else
                         {
-                            sprintf(addr,"%x",modi);
+                            sprintf(addr,"%X",modi);
                         }
 
                         fprintf(f6,"M ^ %s ^ 05+%s\n",addr,name);
+                        r=1;
                     }
                 }//format=4
             }//found=1
@@ -595,27 +596,27 @@ void pass2()
                 sscanf(opr,"%d",&w);
                 if(w<16)
                 {
-                    sprintf(extra,"00000%x",w);
+                    sprintf(extra,"00000%X",w);
                 }
                 else if(w<256)
                 {
-                    sprintf(extra,"0000%x",w);
+                    sprintf(extra,"0000%X",w);
                 }
                 else if(w<4096)
                 {
-                    sprintf(extra,"000%x",w);
+                    sprintf(extra,"000%X",w);
                 }
                 else if(w<65536)
                 {
-                    sprintf(extra,"00%x",w);
+                    sprintf(extra,"00%X",w);
                 }
                 else if(w<1048576)
                 {
-                    sprintf(extra,"0%x",w);
+                    sprintf(extra,"0%X",w);
                 }
                 else
                 {
-                    sprintf(extra,"%x",w);
+                    sprintf(extra,"%X",w);
                 }
                 nscopy=nowsize;
                 nowsize=nowsize+3;
@@ -635,7 +636,7 @@ void pass2()
                  strncpy(zz,opr+2,len);
                  for(i=0;i<len;i++)
                  {
-                     sprintf(cat,"%x",zz[i]);
+                     sprintf(cat,"%X",zz[i]);
                      strcat(extra,cat);
                  }
                  nscopy=nowsize;
@@ -659,9 +660,9 @@ void pass2()
             {
             fclose(f7);
             if(nowsize<16)
-            fprintf(f5,"0%x ",nowsize);
+            fprintf(f5,"0%X ",nowsize);
             else
-            fprintf(f5,"%x ",nowsize);
+            fprintf(f5,"%X ",nowsize);
             f8=fopen("listing.txt","r");
             while(!feof(f8))
             { counting++;
@@ -677,6 +678,7 @@ void pass2()
             }
             f7=fopen("listing.txt","w");
             nowsize=0;
+            t=0;
             nscopy=0;
             }
             }
@@ -697,9 +699,9 @@ void pass2()
                 {
                     fclose(f7);
                     if(nscopy<16)
-                        fprintf(f5,"0%x ",nscopy);
+                        fprintf(f5,"0%X ",nscopy);
                     else
-                        fprintf(f5,"%x ",nscopy);
+                        fprintf(f5,"%X ",nscopy);
                     f8=fopen("listing.txt","r");
                     while(!feof(f8))
                     { counting++;
@@ -738,9 +740,9 @@ void pass2()
         {
             counting=0;
         if(nowsize<16)
-        fprintf(f5,"0%x ",nowsize);
+        fprintf(f5,"0%X ",nowsize);
         else
-        fprintf(f5,"%x ",nowsize);
+        fprintf(f5,"%X ",nowsize);
         f8=fopen("listing.txt","r");
         while(!feof(f8))
         { counting++;
@@ -757,10 +759,19 @@ void pass2()
         fclose(f8);
         }
         if(r==1)
-        {
+        {   i=1;
+            counting=0;
              f1=fopen("relocate.txt","r");
         while(!feof(f1))
         {
+            fscanf(f1,"%s %s %s %s %s",temp,temp1,format3,format4,search);
+            counting++;
+        }
+        fclose(f1);
+        f1=fopen("relocate.txt","r");
+        while(i<counting)
+        {
+             i++;
             fscanf(f1,"%s %s %s %s %s",temp,temp1,format3,format4,search);
             fprintf(f5,"\n%s %s %s %s %s",temp,temp1,format3,format4,search);
 
